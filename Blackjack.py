@@ -50,11 +50,12 @@ class BlackJack:
         self.player_total_points = total
         print(f"Points: {self.player_total_points}")
     
-    def dealer_point_total(self):
+    def dealer_point_total(self, d_hand):
         total = 0
-        for card in BlackJack.dealer_hand:
+        for card in d_hand:
             total += card.points
         self.dealer_total_points = total
+        
         
 
     def dealer_cards(self, d_hand, p_hand):
@@ -95,6 +96,17 @@ class BlackJack:
 
     def Stand(self, d_hand, p_hand):
         while True:
+            if self.dealer_total_points >= 17:
+                print("\t\tDealer Hand: ", end=" ")
+                print("\t", end=" ")
+                for card in d_hand:
+                    print(f"{card}   ", end=" ")
+                total = 0
+                for card in d_hand:
+                    total += card.points
+                self.dealer_total_points = total
+                print(f"Points: {self.dealer_total_points}\n")
+                break
             print()
             # draw = input("Ready? Y/N: ").lower()
             # if draw == 'y':
@@ -308,11 +320,8 @@ def main():
                     player.show_player_cards(player_hand)
                     blackjack.player_point_total(player_hand)
                     # Count up Dealer points
-                    blackjack.dealer_point_total()
-                    # Check if dealer points over 17 already
-                    if blackjack.dealer_over():
-                        blackjack.settlement()
-                        break
+                    blackjack.dealer_point_total(dealer_hand)
+                    print()
                     # Dealer "Hits" until his card total is >= 17
                     # Reveal dealers card
                     blackjack.Stand(dealer_hand, player_hand)
@@ -338,16 +347,7 @@ def main():
                 elif play_again == 'n':
                     break
             # Count up Dealer points
-            blackjack.dealer_point_total()
-            # Check if dealer points over 17 already
-            if blackjack.dealer_over():
-                blackjack.settlement()
-                print()
-                play_again = input("Would you like to play again? Y/N: ").lower()
-                if play_again == 'y':
-                    continue
-                elif play_again == 'n':
-                    break
+            blackjack.dealer_point_total(dealer_hand)
             # Start Stand Phase
             blackjack.Stand(dealer_hand, player_hand)
             # Check if Dealer Busted
@@ -370,7 +370,8 @@ def main():
             player.show_player_cards(player_hand)
             blackjack.player_point_total(player_hand)
             # Count up Dealer points
-            blackjack.dealer_point_total()
+            blackjack.dealer_point_total(dealer_hand)
+            print()
             # Dealer "Hits" until his card total is >= 17
             # Reveal dealers card
             blackjack.Stand(dealer_hand, player_hand)
